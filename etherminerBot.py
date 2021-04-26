@@ -4,8 +4,8 @@ import etherminerAPI
 from itertools import cycle
 
 
-HEX_MINER = '4744B5AD9494Ea1569051694Cc548a7d3140FB01'
-BOT_TOKEN = 'ODM1ODYyNTE4NjgwMzg3NTg1.YIVnog.YR7XbNo3bB7gi7E29tNn_cmlWbE'
+HEX_MINER = '#####token####'
+BOT_TOKEN = '####bottoken###'
 
 client = commands.Bot(command_prefix='.')
 
