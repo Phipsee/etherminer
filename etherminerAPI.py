@@ -66,5 +66,3 @@ def get_info(minerId):
 
     return reply
 
-
-print(get_info('4744B5AD9494Ea1569051694Cc548a7d3140FB01'))
