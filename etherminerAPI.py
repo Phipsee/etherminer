@@ -4,17 +4,24 @@ ETHEREUM_BASE_UNIT_FAKTOR = 1_000_000_000_000_000_000
 
 ENDPOINT_ETHERMINER = 'https://api.ethermine.org'
 
+ENDPOINT_ETH_EUR_CONVERTER = 'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=EUR'
+
 DASHBOARD = '/miner/:miner/dashboard'
 
-REPLY_INFO = 'Current:  :currentHashrate\nReported: :reportedHashrate\nUnpaid: :unpaid'
+REPLY_INFO = 'Current:  :currentHashrate\nReported: :reportedHashrate\nUnpaid: :unpaid / :unpaid_EUR'
 
 KEY_CURRENT_HASHRATE = 'currentHashrate'
 KEY_REPORTED_HASHRATE = 'reportedHashrate'
 KEY_AVERAGE_HASHRATE = 'averageHashrate'
 KEY_UNPAID_BALANCE = 'unpaid'
+KEY_UNPAID_BALANCE_EUR = 'unpaid_EUR'
 
 
-def get_ethreum_amount(wei_amount):
+def get_ethereum_amount(wei_amount):
+    return wei_amount/ETHEREUM_BASE_UNIT_FAKTOR
+
+
+def get_ethreum_amount_text(wei_amount):
     return "{:.6f}".format(wei_amount/ETHEREUM_BASE_UNIT_FAKTOR)+' ETH'
 
 
@@ -61,8 +68,19 @@ def get_info(minerId):
     reply = reply.replace(':'+KEY_REPORTED_HASHRATE,
                           get_hashrate(current_stats[KEY_REPORTED_HASHRATE]))
 
+    reply = reply.replace(':'+KEY_UNPAID_BALANCE_EUR,
+                          get_eth2eur(current_stats[KEY_UNPAID_BALANCE]))
+
     reply = reply.replace(':'+KEY_UNPAID_BALANCE,
-                          get_ethreum_amount(current_stats[KEY_UNPAID_BALANCE]))
+                          get_ethreum_amount_text(current_stats[KEY_UNPAID_BALANCE]))
 
     return reply
 
+
+def get_eth2eur(wei):
+    eth = get_ethereum_amount(wei)
+    response = requests.get(ENDPOINT_ETH_EUR_CONVERTER)
+    if response.status_code != 200:
+        return 'error while retrieving...'
+
+    return "{:.2f}".format(response.json()['EUR'] * eth)+'€'
