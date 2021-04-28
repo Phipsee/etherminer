@@ -15,7 +15,7 @@ client.used_channel = 0
 @client.event
 async def on_ready():
     print('Bot is ready.')
-    game = discord.Game("Getting rich")
+    game = discord.Game("Ethercraft")
     await client.change_presence(status=discord.Status.online, activity=game)
     print('finished init')
 
@@ -23,6 +23,11 @@ async def on_ready():
 @client.command(aliases=['MARCO', 'Marco'])
 async def marco(ctx):
     await ctx.send('POLO!')
+	
+	
+@client.command(aliases=['Hello there!'])
+async def marco(ctx):
+    await ctx.send('General @Rehkitz')
 
 
 @client.command(aliases=['useThis'])
