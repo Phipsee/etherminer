@@ -23,10 +23,10 @@ async def on_ready():
 @client.command(aliases=['MARCO', 'Marco'])
 async def marco(ctx):
     await ctx.send('POLO!')
-	
-	
+
+
 @client.command(aliases=['Hello there!'])
-async def marco(ctx):
+async def hello(ctx):
     await ctx.send('General @Rehkitz')
 
 
