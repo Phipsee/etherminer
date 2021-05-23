@@ -1,11 +1,12 @@
 import discord
 from discord.ext import commands, tasks
 import etherminerAPI
+import globals
 from itertools import cycle
 
 
-HEX_MINER = '#####token####'
-BOT_TOKEN = '####bottoken###'
+HEX_MINER = globals.TOKEN_HEX_MINER
+BOT_TOKEN = globals.TOKEN_DISCORD_BOT
 
 client = commands.Bot(command_prefix='.')
 
@@ -27,27 +28,30 @@ async def marco(ctx):
 
 @client.command(aliases=['Hello there!'])
 async def hello(ctx):
-    await ctx.send('General @Rehkitz')
+    alija_id = '<@348811957614411776>'
+    await ctx.send('General %s' % alija_id)
 
 
 @client.command(aliases=['useThis'])
 async def useMeDaddy(ctx):
     client.used_channel = ctx.channel.id
+    client.used_guild = ctx.guild.id
+    etherminerAPI.doSaveChannelGuild(ctx.guild.id, ctx.channel.id)
     await ctx.send('Now using this channel for rich bitch notifications.')
     minerInfo.start()
 
 
-@tasks.loop(seconds=10)
+@tasks.loop(seconds=60*60)
 async def minerInfo():
     print('invoked minerInfo')
-    if client.used_channel == 0:
-        print('no valid channel '+str(client.used_channel))
-        return
-    channel = client.get_channel(client.used_channel)
-    print(client.used_channel)
     msg = etherminerAPI.get_info(HEX_MINER)
 
-    await channel.send(msg)
+    for ch in etherminerAPI.doRetrieveChannels():
+        channel = client.get_channel(ch)
+        if (channel == None):
+            continue
+
+        await channel.send(msg)
 
 
 client.run(BOT_TOKEN)
