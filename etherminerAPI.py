@@ -8,13 +8,14 @@ ENDPOINT_ETH_EUR_CONVERTER = 'https://min-api.cryptocompare.com/data/price?fsym=
 
 DASHBOARD = '/miner/:miner/dashboard'
 
-REPLY_INFO = 'Current:  :currentHashrate\nReported: :reportedHashrate\nUnpaid: :unpaid / :unpaid_EUR'
+REPLY_INFO = 'Current:  :currentHashrate\nReported: :reportedHashrate\nUnpaid: :unpaid / :unpaid_EUR\nEthereum: :ethereumPriceEur'
 
 KEY_CURRENT_HASHRATE = 'currentHashrate'
 KEY_REPORTED_HASHRATE = 'reportedHashrate'
 KEY_AVERAGE_HASHRATE = 'averageHashrate'
 KEY_UNPAID_BALANCE = 'unpaid'
 KEY_UNPAID_BALANCE_EUR = 'unpaid_EUR'
+KEY_ETHEREUM_PRICE_EUR = 'ethereumPriceEur'
 
 
 def get_ethereum_amount(wei_amount):
@@ -79,6 +80,9 @@ def get_info(minerId):
 
     reply = reply.replace(':'+KEY_UNPAID_BALANCE,
                           get_ethreum_amount_text(stats['unpaid_eth']))
+
+    reply = reply.replace(':'+KEY_ETHEREUM_PRICE_EUR,
+                          get_eth2eur(ETHEREUM_BASE_UNIT_FAKTOR, stats['eth_eur']))
 
     return reply
 

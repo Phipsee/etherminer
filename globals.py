@@ -1,7 +1,8 @@
 import configparser
+import os
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read(os.path.join(os.path.dirname(__file__), 'config.ini'))
 
 DB_USER = config['DB']['USER']
 DB_PASSWORD = config['DB']['PASSWORD']
